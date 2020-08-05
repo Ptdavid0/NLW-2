@@ -1,33 +1,51 @@
 import React from "react";
 import "./styles.css";
 import whatsAppIcon from "../../assets/images/icons/whatsapp.svg";
-import reigenImage from "../../assets/images/circle-cropped.png";
+import api from "../../services/api";
 
-function TeacherItem() {
+export interface Teacher{
+    id:number,
+    avatar:string,
+    bio:string,
+    cost:number,
+    name:string,
+    subject:string,
+    whatsapp:string
+  
+}
+
+interface TeacherItemProps{
+  teacher:Teacher
+}
+
+const TeacherItem:React.FC<TeacherItemProps> = ({teacher}) =>{
+
+  function createNewConnection() {
+    api.post('/connections',{
+      user_id:teacher.id
+    })
+  }
   return (
     <article className="teacher-item">
       <header>
-        <img src={reigenImage} alt="Faceless" />
+        <img src={teacher.avatar} alt={teacher.name} />
         <div>
-          <strong>Reigen</strong>
-          <span>Exorcist</span>
+          <strong>{teacher.name}</strong>
+          <span>{teacher.subject}</span>
         </div>
       </header>
       <p>
-        I am the greatest exorcist this world has ever seen.
-        <br />
-        <br />I have changed the life of more than 200.000 humans, during my 30
-        years as an exorcist.
+      {teacher.bio}
       </p>
 
       <footer>
         <p>
-          Price/Hour<strong>US$ 150.00</strong>
+          Price/Hour<strong>US$ {teacher.cost}</strong>
         </p>
-        <button type="button">
+        <a target="_blank" onClick={createNewConnection} href={`https://wa.me/${teacher.whatsapp}`}>
           <img src={whatsAppIcon} alt="Get in touch" />
           Get in touch
-        </button>
+        </a>
       </footer>
     </article>
   );
